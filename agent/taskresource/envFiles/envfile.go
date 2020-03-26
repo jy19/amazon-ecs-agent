@@ -466,6 +466,7 @@ func (envfile *EnvironmentFileResource) MarshalJSON() ([]byte, error) {
 			return &envfileStatus
 		}(),
 		EnvironmentFilesSource: envfile.environmentFilesSource,
+		EnvironmentFilesLocation: envfile.environmentFilesLocation,
 		ExecutionCredentialsID: envfile.executionCredentialsID,
 	})
 
