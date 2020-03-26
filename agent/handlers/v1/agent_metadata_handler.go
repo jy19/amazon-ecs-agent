@@ -28,8 +28,8 @@ const AgentMetadataPath = "/v1/metadata"
 
 // AgentMetadataHandler creates response for 'v1/metadata' API.
 func AgentMetadataHandler(containerInstanceArn *string, cfg *config.Config) func(http.ResponseWriter, *http.Request) {
-	seelog.Infof("handling v1 metadata for containerInstanceArn %s", *containerInstanceArn)
 	return func(w http.ResponseWriter, r *http.Request) {
+		seelog.Infof("handling v1 metadata for containerInstanceArn %s", *containerInstanceArn)
 		resp := &MetadataResponse{
 			Cluster:              cfg.Cluster,
 			ContainerInstanceArn: containerInstanceArn,
