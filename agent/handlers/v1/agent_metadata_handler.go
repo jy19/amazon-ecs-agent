@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ecs-agent/agent/config"
 	"github.com/aws/amazon-ecs-agent/agent/handlers/utils"
 	agentversion "github.com/aws/amazon-ecs-agent/agent/version"
+	"github.com/cihub/seelog"
 )
 
 // AgentMetadataPath is the Agent metadata path for v1 handler.
@@ -27,13 +28,17 @@ const AgentMetadataPath = "/v1/metadata"
 
 // AgentMetadataHandler creates response for 'v1/metadata' API.
 func AgentMetadataHandler(containerInstanceArn *string, cfg *config.Config) func(http.ResponseWriter, *http.Request) {
+	seelog.Infof("handling v1 metadata for containerInstanceArn %s", *containerInstanceArn)
 	return func(w http.ResponseWriter, r *http.Request) {
 		resp := &MetadataResponse{
 			Cluster:              cfg.Cluster,
 			ContainerInstanceArn: containerInstanceArn,
 			Version:              agentversion.String(),
 		}
-		responseJSON, _ := json.Marshal(resp)
+		responseJSON, err := json.Marshal(resp)
+		if err != nil {
+			seelog.Errorf("something went wrong trying to marshal response into JSON, resp: %v", resp)
+		}
 		utils.WriteJSONToResponse(w, http.StatusOK, responseJSON, utils.RequestTypeAgentMetadata)
 	}
 }
