@@ -76,6 +76,7 @@ func v1HandlersSetup(serverMux *http.ServeMux,
 // running on it. "V1" here indicates the hostname version of this server instead
 // of the handler versions, i.e. "V1" server can include "V1" and "V2" handlers.
 func ServeIntrospectionHTTPEndpoint(containerInstanceArn *string, taskEngine engine.TaskEngine, cfg *config.Config) {
+	defer seelog.Info("Introspection server went down")
 	// Is this the right level to type assert, assuming we'd abstract multiple taskengines here?
 	// Revisit if we ever add another type..
 	dockerTaskEngine := taskEngine.(*engine.DockerTaskEngine)
