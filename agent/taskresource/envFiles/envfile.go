@@ -91,6 +91,7 @@ func NewEnvironmentFileResource(cluster, taskARN, region, dataDir, containerName
 		environmentFilesSource: envfiles,
 		os:                     oswrapper.NewOS(),
 		ioutil:                 ioutilwrapper.NewIOUtil(),
+		bufio:                  bufiowrapper.NewBufio(),
 		s3ClientCreator:        factory.NewS3ClientCreator(),
 		executionCredentialsID: executionCredentialsID,
 		credentialsManager:     credentialsManager,
