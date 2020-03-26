@@ -85,6 +85,7 @@ func ServeIntrospectionHTTPEndpoint(containerInstanceArn *string, taskEngine eng
 	for {
 		once := sync.Once{}
 		retry.RetryWithBackoff(retry.NewExponentialBackoff(time.Second, time.Minute, 0.2, 2), func() error {
+			seelog.Info("Introspection server: retrying..")
 			// TODO, make this cancellable and use the passed in context; for
 			// now, not critical if this gets interrupted
 			err := server.ListenAndServe()
