@@ -451,7 +451,7 @@ func (envfile *EnvironmentFileResource) MarshalJSON() ([]byte, error) {
 		return nil, errors.New("envfile resource is nil")
 	}
 	createdAt := envfile.GetCreatedAt()
-	return json.Marshal(environmentFileResourceJSON{
+	envfileJson, err := json.Marshal(environmentFileResourceJSON{
 		TaskARN:       envfile.taskARN,
 		ContainerName: envfile.containerName,
 		CreatedAt:     &createdAt,
@@ -469,6 +469,13 @@ func (envfile *EnvironmentFileResource) MarshalJSON() ([]byte, error) {
 		ExecutionCredentialsID: envfile.executionCredentialsID,
 	})
 
+	if err != nil {
+		seelog.Error("Unable to marshal JSON for envfile resource")
+		return nil, err
+	}
+
+	return envfileJson, nil
+
 }
 
 // UnmarshalJSON deserializes the raw JSON to an EnvironmentFileResource struct
@@ -476,6 +483,7 @@ func (envfile *EnvironmentFileResource) UnmarshalJSON(b []byte) error {
 	envfileJson := environmentFileResourceJSON{}
 
 	if err := json.Unmarshal(b, &envfileJson); err != nil {
+		seelog.Error("Unable to unmarshalJSON for envfile resource")
 		return err
 	}
 
