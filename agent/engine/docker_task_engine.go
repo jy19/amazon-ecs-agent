@@ -1019,6 +1019,7 @@ func (engine *DockerTaskEngine) createContainer(task *apitask.Task, container *a
 	}
 
 	if container.ShouldCreateWithEnvFiles() {
+		seelog.Debugf("Container %s should be created with environment files", container.Name)
 		err := task.MergeEnvVarsFromEnvfiles(container)
 		if err != nil {
 			seelog.Errorf("Error populating environment variables from specified files into container %s", container.Name)

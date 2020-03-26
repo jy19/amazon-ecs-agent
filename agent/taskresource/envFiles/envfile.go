@@ -344,7 +344,7 @@ func (envfile *EnvironmentFileResource) addToEnvironmentFilesLocation(downloadPa
 	envfile.environmentFilesLocation = append(envfile.environmentFilesLocation, downloadPath)
 }
 
-func (envfile *EnvironmentFileResource) getenvironmentFilesLocation() []string {
+func (envfile *EnvironmentFileResource) getEnvironmentFilesLocation() []string {
 	envfile.lock.RLock()
 	defer envfile.lock.RUnlock()
 
@@ -523,8 +523,9 @@ func (envfile *EnvironmentFileResource) GetContainerName() string {
 // ReadEnvVarsFromEnvFiles reads the environment files that have been downloaded
 // and puts them into a list of maps
 func (envfile *EnvironmentFileResource) ReadEnvVarsFromEnvfiles() ([]map[string]string, error) {
+	seelog.Debugf("Reading environment variables from files for task %s", envfile.taskARN)
 	var envVarsPerEnvfile []map[string]string
-	envfileLocations := envfile.getenvironmentFilesLocation()
+	envfileLocations := envfile.getEnvironmentFilesLocation()
 
 	for _, envfilePath := range envfileLocations {
 		envVars, err := envfile.readEnvVarsFromFile(envfilePath)
@@ -538,6 +539,7 @@ func (envfile *EnvironmentFileResource) ReadEnvVarsFromEnvfiles() ([]map[string]
 }
 
 func (envfile *EnvironmentFileResource) readEnvVarsFromFile(envfilePath string) (map[string]string, error) {
+	seelog.Debugf("Reading environment variables from file at path %s", envfilePath)
 	file, err := envfile.os.Open(envfilePath)
 	if err != nil {
 		seelog.Errorf("Unable to open environment file at %s to read the variables", envfilePath)
